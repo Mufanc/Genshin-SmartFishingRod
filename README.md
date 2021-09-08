@@ -2,7 +2,7 @@
 
 > * 您只需抛出鱼竿，然后便可等待钓鱼机自动完成钓鱼过程
  
-![](./blob/master/images/demo.png)
+![](images/demo.png)
 
 ### 使用教程：
 
