@@ -44,15 +44,15 @@ class Manager(object):
         return cv2.cvtColor(img, cv2.COLOR_BGRA2BGR)  # BGR
 
     def mouse_down(self):
-        if self.mouse_state:
-            return
-        self.mouse_state = True
+        # if self.mouse_state:
+        #     return
+        # self.mouse_state = True
         self.mouse_event(WM_LBUTTONDOWN)
 
     def mouse_up(self):
-        if not self.mouse_state:
-            return
-        self.mouse_state = False
+        # if not self.mouse_state:
+        #     return
+        # self.mouse_state = False
         self.mouse_event(WM_LBUTTONUP)
 
     def mouse_event(self, message):

@@ -1,10 +1,10 @@
 from threading import Thread
 from time import sleep
 from time import strftime
-from hotkeys import HotKey
 
 from detector import match, clip_image, detect
 from genshin import Manager
+from hotkeys import HotKey
 from overlay import Overlay
 
 

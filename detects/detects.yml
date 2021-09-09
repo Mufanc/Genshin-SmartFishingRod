@@ -9,7 +9,7 @@ detects:
   - name: hook
     rect: { left: 0.49, top: 0.1, right: 0.49, bottom: 0.78 }
     mode: find
-    threshold: 0.85
+    threshold: 0.8
     template: hook.png
 
 progress:  # 进度条相关
