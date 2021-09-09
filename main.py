@@ -35,17 +35,19 @@ def main():
         image = manager.screencap()
         last_cap = image
         cover, groups = match(image)
-        if 'button' in groups and 'hook' not in groups:
-            manager.mouse_down()
-            sleep(0.3)
-            manager.mouse_up()
-        elif 'hook' in groups:
+        progress = False
+        if 'hook' in groups:
             result = detect(image, groups['hook'], cover)
             if result is not None:
+                progress = True
                 if result:
                     manager.mouse_down()
                 else:
                     manager.mouse_up()
+        if 'button' in groups and not progress:
+            manager.mouse_down()
+            sleep(0.3)
+            manager.mouse_up()
         overlay.update(cover)
         overlay.follow(manager)
         dps += 1
