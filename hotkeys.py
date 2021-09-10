@@ -10,8 +10,9 @@ user32 = ctypes.windll.user32
 
 
 class HotKey(Thread):
-    def __init__(self, callback):
+    def __init__(self, overlay, callback):
         super().__init__()
+        self.overlay = overlay
         self.callback = callback
         self.daemon = True
 
@@ -19,6 +20,7 @@ class HotKey(Thread):
         for i in range(10):
             key_id = base + i
             user32.RegisterHotKey(None, key_id, MOD_ALT, VK_NUMPAD0 + i)
+        user32.RegisterHotKey(None, base + 10, MOD_ALT, VK_DECIMAL)
         try:
             msg = wintypes.MSG()
             while True:
@@ -28,6 +30,9 @@ class HotKey(Thread):
                     for i in range(10):
                         if msg.wParam == base + i:
                             self.callback(i)
+                    if msg.wParam == base + 10:
+                        self.overlay.switch()
         finally:
             for i in range(10):
                 user32.UnregisterHotKey(None, base + i)
+            user32.UnregisterHotKey(None, base + 10)

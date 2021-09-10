@@ -1,3 +1,6 @@
+import ctypes
+import sys
+import cv2
 from threading import Thread
 from time import sleep
 from time import strftime
@@ -8,10 +11,18 @@ from hotkeys import HotKey
 from overlay import Overlay
 
 
+def mark_dps(cover):
+    text, font = f'dps:{last_dps}', cv2.FONT_HERSHEY_COMPLEX
+    rect, _ = cv2.getTextSize(text, font, 0.7, 2)
+    color = (0, 255, 0) if last_dps > 10 else (0, 0, 255)
+    cv2.putText(cover, text, (0, rect[1]), font, 0.7, color, 2)
+
+
 def timer():
-    global dps
+    global dps, last_dps
     while True:
         print(f'\r[{strftime("%H:%M:%S")}] {dps} detects per second.', end='')
+        last_dps = dps
         dps = 0
         sleep(1)
 
@@ -30,7 +41,7 @@ def main():
     while overlay is None:
         sleep(0.1)
     last_cap = None
-    HotKey(lambda idx: clip_image(last_cap, idx)).start()
+    HotKey(overlay, lambda idx: clip_image(last_cap, idx)).start()
     while True:
         image = manager.screencap()
         last_cap = image
@@ -48,13 +59,18 @@ def main():
             manager.mouse_down()
             sleep(0.3)
             manager.mouse_up()
+        mark_dps(cover)
         overlay.update(cover)
         overlay.follow(manager)
         dps += 1
 
 
 if __name__ == '__main__':
-    dps = 0
-    manager = Manager('UnityWndClass', '原神')
-    overlay = None
-    main()
+    if ctypes.windll.shell32.IsUserAnAdmin():
+        dps = 0
+        last_dps = 0
+        manager = Manager('UnityWndClass', '原神')
+        overlay = None
+        main()
+    else:  # 以管理员身份重启
+        ctypes.windll.shell32.ShellExecuteW(None, 'runas', sys.executable, __file__, None, 1)

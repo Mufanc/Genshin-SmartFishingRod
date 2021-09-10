@@ -1,2 +1,4 @@
 /venv/
 /detects/clips/*
+/build/
+/dist/

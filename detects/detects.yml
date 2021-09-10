@@ -1,3 +1,5 @@
+# Default: 1600x900
+
 detects:
   - name: button
     convert: 'gray'  # 颜色转换，会通过 cv2.COLOR_BGR2{{convert.upper()}} 进行转换

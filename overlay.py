@@ -23,6 +23,7 @@ class Overlay(object):
         root.attributes('-topmost', True)
         # root.after_idle(root.attributes, '-topmost', True)
 
+        self.visible = True
         self.hwnd = wintypes.HANDLE(int(root.frame(), 16)).value
         win32gui.SetWindowLong(self.hwnd, GWL_EXSTYLE, WS_EX_TRANSPARENT | WS_EX_LAYERED)
         # win32gui.SetLayeredWindowAttributes(self.hwnd, 0, 0, LWA_ALPHA)
@@ -41,3 +42,11 @@ class Overlay(object):
         )
         self.panel.configure(image=self.image)
         self.panel.image = self.image
+
+    def switch(self):
+        if self.visible:
+            self.visible = False
+            self.root.withdraw()
+        else:
+            self.visible = True
+            self.root.deiconify()
