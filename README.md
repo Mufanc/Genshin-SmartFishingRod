@@ -23,7 +23,7 @@
 
 ### 使用教程：
 
-> 💡 Release 版本现已发布，下载后直接解压即可使用，[点击这里](releases/latest) 跳转到下载页
+> 💡 Release 版本现已发布，下载后直接解压即可使用，[点击这里](https://github.com/Mufanc/Genshin-SmartFishingRod/releases/latest) 跳转到下载页
 > 
 > ![](images/quick-start.png)
 
