@@ -1,5 +1,6 @@
 import ctypes
 import ctypes.wintypes as wintypes
+from time import sleep
 
 import cv2
 import numpy as np
@@ -17,7 +18,6 @@ class Manager(object):
         self.hwnd_dc = win32gui.GetWindowDC(self.hwnd)
         self.mfc_dc = win32ui.CreateDCFromHandle(self.hwnd_dc)
         self.save_dc = self.mfc_dc.CreateCompatibleDC()
-        self.mouse_state = False  # True 按下 | False 抬起
 
     def get_window_rect(self):  # dpi 缩放级别会影响 win32gui.GetWindowRect，故换用此实现
         rect = wintypes.RECT()
@@ -41,19 +41,18 @@ class Manager(object):
         win32gui.DeleteObject(bitmap.GetHandle())
         img = np.frombuffer(ints_array, dtype='uint8')
         img.shape = (height, width, 4)
-        return cv2.cvtColor(img, cv2.COLOR_BGRA2BGR)  # BGR
+        return img[:, :, :3], img[:, :, 3]  # BGR
 
     def mouse_down(self):
-        # if self.mouse_state:
-        #     return
-        # self.mouse_state = True
         self.mouse_event(WM_LBUTTONDOWN)
 
     def mouse_up(self):
-        # if not self.mouse_state:
-        #     return
-        # self.mouse_state = False
         self.mouse_event(WM_LBUTTONUP)
+
+    def mouse_press(self, time):
+        self.mouse_down()
+        sleep(time)
+        self.mouse_up()
 
     def mouse_event(self, message):
         left, top, right, bottom = self.get_window_rect()

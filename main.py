@@ -22,8 +22,7 @@ def timer():
     global dps, last_dps
     while True:
         print(f'\r[{strftime("%H:%M:%S")}] {dps} detects per second.', end='')
-        last_dps = dps
-        dps = 0
+        last_dps, dps = dps, 0
         sleep(1)
 
 
@@ -39,14 +38,14 @@ def main():
     Thread(target=timer, daemon=True).start()
     Thread(target=ui_thread, daemon=True).start()
     while overlay is None:
-        sleep(0.1)
+        sleep(1)
     last_cap = None
     HotKey(overlay, lambda idx: clip_image(last_cap, idx)).start()
     while True:
-        image = manager.screencap()
+        image, alpha = manager.screencap()
         last_cap = image
         cover, groups = match(image)
-        progress = False
+        progress = False  # 标记进度条
         if 'hook' in groups:
             result = detect(image, groups['hook'], cover)
             if result is not None:
@@ -56,9 +55,7 @@ def main():
                 else:
                     manager.mouse_up()
         if 'button' in groups and not progress:
-            manager.mouse_down()
-            sleep(0.3)
-            manager.mouse_up()
+            manager.mouse_press(0.3)
         mark_dps(cover)
         overlay.update(cover)
         overlay.follow(manager)
@@ -67,10 +64,9 @@ def main():
 
 if __name__ == '__main__':
     if ctypes.windll.shell32.IsUserAnAdmin():
-        dps = 0
-        last_dps = 0
+        dps, last_dps = 0, 0
         manager = Manager('UnityWndClass', '原神')
         overlay = None
         main()
-    else:  # 以管理员身份重启
+    else:  # 自动以管理员身份重启
         ctypes.windll.shell32.ShellExecuteW(None, 'runas', sys.executable, __file__, None, 1)
