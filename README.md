@@ -8,7 +8,9 @@
  
 ![](images/demo.gif)
 
-* [点击这里](https://www.bilibili.com/video/BV1q64y1h7Wu) 查看演示视频
+* 演示视频：
+  * [哔哩哔哩（链接挂了）](https://www.bilibili.com/video/BV1q64y1h7Wu)
+  * [YouTube](https://youtu.be/lhUBmbiG1Oc)
 
 ✨欢迎大家在 Issues 中分享自己的配置文件✨
 
