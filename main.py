@@ -22,6 +22,7 @@ def timer():
     global dps, last_dps
     while True:
         print(f'\r[{strftime("%H:%M:%S")}] {dps} detects per second.', end='')
+        sys.stdout.flush()
         last_dps, dps = dps, 0
         sleep(1)
 
@@ -63,10 +64,15 @@ def main():
 
 
 if __name__ == '__main__':
-    if ctypes.windll.shell32.IsUserAnAdmin():
-        dps, last_dps = 0, 0
-        manager = Manager('UnityWndClass', '原神')
-        overlay = None
-        main()
-    else:  # 自动以管理员身份重启
-        ctypes.windll.shell32.ShellExecuteW(None, 'runas', sys.executable, __file__, None, 1)
+    # if ctypes.windll.shell32.IsUserAnAdmin():
+    #     dps, last_dps = 0, 0
+    #     manager = Manager('UnityWndClass', '原神')
+    #     overlay = None
+    #     main()
+    # else:  # 自动以管理员身份重启
+    #     ctypes.windll.shell32.ShellExecuteW(None, 'runas', sys.executable, __file__, None, 1)
+
+    dps, last_dps = 0, 0
+    manager = Manager('UnityWndClass', '原神')
+    overlay = None
+    main()

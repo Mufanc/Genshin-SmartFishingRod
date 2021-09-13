@@ -1,7 +1,7 @@
 import ctypes
 import ctypes.wintypes as wintypes
 from time import sleep
-
+import sys
 import cv2
 import numpy as np
 import win32gui
@@ -44,10 +44,15 @@ class Manager(object):
         return img[:, :, :3], img[:, :, 3]  # BGR
 
     def mouse_down(self):
-        self.mouse_event(WM_LBUTTONDOWN)
+        print(1)
+        sys.stdout.flush()
+        # self.mouse_event(WM_LBUTTONDOWN)
+
 
     def mouse_up(self):
-        self.mouse_event(WM_LBUTTONUP)
+        print(0)
+        sys.stdout.flush()
+        # self.mouse_event(WM_LBUTTONUP)
 
     def mouse_press(self, time):
         self.mouse_down()
@@ -63,3 +68,4 @@ class Manager(object):
         self.save_dc.DeleteDC()
         self.mfc_dc.DeleteDC()
         win32gui.ReleaseDC(self.hwnd, self.hwnd_dc)
+
