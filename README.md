@@ -1,6 +1,6 @@
 ## 原神钓鱼辅助工具 v3.0.1 - 船新升级
 
-> <div style="display: flex; justify-content: center"><b>「您只需抛出鱼竿，然后我们会帮您搞定一切」</b></div>
+> <div align="center"><b>「您只需抛出鱼竿，然后我们会帮您搞定一切」</b></div><br/>
 > 
 > * 如果你觉得这个脚本好用，请点一个 Star⭐，你的 Star 就是作者更新最大的动力
  
