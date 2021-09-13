@@ -1,4 +1,9 @@
+# 虚拟环境
 /venv/
-/detects/clips/*
+
+# 打包产生的文件
 /build/
 /dist/
+
+# 临时截图
+/detects/*/clips/*

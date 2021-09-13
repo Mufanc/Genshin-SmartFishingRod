@@ -1,0 +1,25 @@
+# use for: 1600x900_dpi100_SMAA
+
+templates:
+  - name: button
+    rect: { left: 0.83, top: 0.88, right: 0.13, bottom: 0.03 }  # 识别区域
+    threshold: 0.95
+    template: button.png
+
+  - name: hook
+    rect: { left: 0.49, top: 0.1, right: 0.49, bottom: 0.76 }
+    threshold: 0.7
+    template: hook.png
+
+progress:
+  # 进度条的相对宽高
+  width: 0.26
+  height: 0.027
+
+  # 进度条中心点到鱼钩图案中心点的高度
+  offset: 0.053
+
+  # 其它相关设定
+  frame-color: [ 180, 225, 225 ]  # BGR
+  threshold: 0.035
+  sp: [ 6, 18 ]
