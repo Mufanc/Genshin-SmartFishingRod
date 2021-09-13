@@ -8,6 +8,7 @@ import numpy as np
 from loguru import logger
 
 from automaton import Genshin, Overlay, Detector, Hotkey
+from automaton import alpha_mask
 
 
 class Timer(Thread):
@@ -35,13 +36,15 @@ def main():
     hide_ui = False
     while True:
         screen = game.screencap()
+        # cv2.imshow('Debug', alpha_mask(screen[70:200, 750:850]))
+        # cv2.waitKey(1)
 
         if key := hotkey.get():
             if key[0] == 'NUMPAD':
                 if key[1]:
                     detector.clip_image(screen, key[1])
                 else:  # Todo: 配置文件生成工具
-                    cv2.imshow('Configuration', screen)
+                    cv2.imshow('Configuration', alpha_mask(screen))
                     cv2.waitKey(0)
             else:
                 hide_ui = not hide_ui

@@ -4,6 +4,7 @@ import yaml
 from loguru import logger
 
 from configs import configs
+from .utils import alpha_mask
 
 COLOR_RED = (0, 0, 255)
 COLOR_GREEN = (0, 255, 0)
@@ -43,7 +44,7 @@ class Detector(object):
         template = self.configs['templates'][index]
         x1, y1, x2, y2 = self.parse_rect((height, width), template['rect'])
         filepath = f'detects/{self.model_name}/clips/{template["name"]}.png'
-        cv2.imwrite(filepath, image[y1:y2, x1:x2])
+        cv2.imwrite(filepath, alpha_mask(image[y1:y2, x1:x2]))
         logger.info(f'Screenshot for "{template["name"]}" saved to {filepath}')
 
     def mark(self, image, x1, y1, x2, y2, text, color):
@@ -65,7 +66,7 @@ class Detector(object):
             x1, y1, x2, y2 = self.parse_rect((height, width), item['rect'])
             hint = f'[{i+1}] {item["name"]}'
             if 'template' in item:
-                target = image[y1:y2, x1:x2]
+                target = alpha_mask(image[y1:y2, x1:x2])
                 template = item['template']
                 self.mark(cover, x1, y1, x2, y2, '', COLOR_YELLOW)
 
@@ -99,7 +100,7 @@ class Detector(object):
         height = int(img_height * progress_config['height'])
         x1, x2 = center_x - width // 2, center_x + width // 2
         y1, y2 = center_y - height // 2, center_y + height // 2
-        progress = image[y1:y2, x1:x2]
+        progress = alpha_mask(image[y1:y2, x1:x2])
 
         frame_color = progress_config['frame-color']
         mask = np.all(progress == frame_color, axis=2)

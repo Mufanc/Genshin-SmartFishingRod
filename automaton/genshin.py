@@ -38,16 +38,8 @@ class Genshin(Process):
             save_dc.BitBlt((0, 0), (width, height), mfc_dc, (0, 0), SRCCOPY)
             ints_array = bitmap.GetBitmapBits(True)
             win32gui.DeleteObject(bitmap.GetHandle())
-            bgra = np.frombuffer(ints_array, dtype=np.uint8)
-            bgra.shape = (height, width, 4)
-
-            if configs['use-alpha']:  # Todo: 只对待检测区域进行透明通道混合，以提高效率
-                image, alpha = bgra[..., :3] >> 4, bgra[..., 3] >> 4
-                np.multiply(image[..., 0], alpha, out=image[..., 0])
-                np.multiply(image[..., 1], alpha, out=image[..., 1])
-                np.multiply(image[..., 2], alpha, out=image[..., 2])
-            else:
-                image = bgra[..., :3]
+            image = np.frombuffer(ints_array, dtype=np.uint8)
+            image.shape = (height, width, 4)
 
             if clip := configs['window-clip'] is not None:
                 # clip: [ left, top, right, bottom ]

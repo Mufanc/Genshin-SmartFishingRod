@@ -12,5 +12,8 @@ use-model: 1600x900_dpi100_SMAA
 # [!] 某些旧版显卡可能无法使用此功能，如果适配出现问题请将该项设置为 False 并更换模板
 use-alpha: True
 
+# 强制将所有颜色转换为灰色，在 Alpha 模式无法使用时可能按需开启
+gray-only: False
+
 # 当游标在滑框内达到此进度后不再点击
-progress-threshold: 0.33
+progress-threshold: 0.4
