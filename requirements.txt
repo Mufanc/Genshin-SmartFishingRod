@@ -1,8 +1,7 @@
-numpy~=1.19.0
-opencv-python~=4.2.0.34
-future~=0.18.2
-Pillow~=8.0.1
-PyYAML~=5.4.1
-pywin32~=301
-pywin32-ctypes~=0.2.0
-loguru~=0.5.3
+loguru>=0.5.3
+opencv-python>=4.5.3.56
+Pillow>=8.0.1
+pywin32>=301
+PyYAML>=5.4.1
+numpy>=1.19.5
+future>=0.18.2

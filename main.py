@@ -1,4 +1,5 @@
 import ctypes
+import multiprocessing
 import sys
 from threading import Thread
 from time import sleep
@@ -68,8 +69,13 @@ def main():
 
 
 if __name__ == '__main__':
-    if ctypes.windll.shell32.IsUserAnAdmin():
-        dps = 0
-        main()
-    else:  # 自动以管理员身份重启
-        ctypes.windll.shell32.ShellExecuteW(None, 'runas', sys.executable, __file__, None, 1)
+    try:
+        multiprocessing.freeze_support()  # 为了 pyinstaller 正常打包
+        if ctypes.windll.shell32.IsUserAnAdmin():
+            dps = 0
+            main()
+        else:  # 自动以管理员身份重启
+            ctypes.windll.shell32.ShellExecuteW(None, 'runas', sys.executable, __file__, None, 1)
+    except Exception as err:
+        print(err)
+        sleep(5)

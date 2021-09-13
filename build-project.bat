@@ -1,6 +1,7 @@
 @echo off
 del /f /s /q build
 del /f /s /q dist
-pyinstaller -y main.spec
+del /f /q main.spec
+pyinstaller -y main.py
 xcopy detects dist\main\detects\ /e
 copy configs.yml dist\main\

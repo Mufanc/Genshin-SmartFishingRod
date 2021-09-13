@@ -176,8 +176,6 @@ rect: { left: 0, top: 0, right: 0.5, bottom: 0.5 }
 
 ## Todo
 
-* [ ] 使用快捷键 <kbd>Alt + 0</kbd> 快速生成一个配置文件 
-
-* [ ] 使用 [Likianta 的打包工具](https://github.com/Likianta/pyportable-installer) 代替 pyinstaller
+* [ ] 使用快捷键 <kbd>Alt + 0</kbd> 快速生成一个配置文件
 
 * [ ] 添加更多的配置文件模板
