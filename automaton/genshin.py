@@ -1,5 +1,4 @@
 from multiprocessing import Process, Pipe
-from time import sleep
 
 import numpy as np
 import win32gui
@@ -41,7 +40,7 @@ class Genshin(Process):
             image = np.frombuffer(ints_array, dtype=np.uint8)
             image.shape = (height, width, 4)
 
-            if clip := configs['window-clip'] is not None:
+            if (clip := configs['window-clip']) is not None:
                 # clip: [ left, top, right, bottom ]
                 image = image[clip[1]:clip[3], clip[0]:clip[2]]
 

@@ -6,7 +6,7 @@
  
 * 感谢 [@hgjazhgj](https://github.com/hgjazhgj) 提供使用 Alpha 通道的思路
 
-* 感谢 [@SwetyCore](https://github.com/SwetyCore) 编写的无需管理员权限版本
+* 感谢 [@SwetyCore](https://github.com/SwetyCore) 开发的无需管理员权限版本
 
 #### 效果展示
  
@@ -179,3 +179,5 @@ rect: { left: 0, top: 0, right: 0.5, bottom: 0.5 }
 * [ ] 使用快捷键 <kbd>Alt + 0</kbd> 快速生成一个配置文件
 
 * [ ] 添加更多的配置文件模板
+
+* [ ] 对不同大小的窗口自动执行缩放

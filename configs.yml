@@ -2,8 +2,8 @@
 game-window: [ 'UnityWndClass', '原神' ]
 
 # 是否裁剪窗口，由四边裁剪宽度（像素） [ left, top, right, bottom ] 表示，默认不裁剪
-#window-clip: [ 30, 50, 30, 10 ]
-window-clip: ~
+window-clip: [ 30, 50, 30, 10 ]
+#window-clip: ~
 
 # 指定检测用的模板，使用针对性的配置文件能进一步提高检测效率
 use-model: 1600x900_dpi100_SMAA
