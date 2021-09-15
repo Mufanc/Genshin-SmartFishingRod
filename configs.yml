@@ -1,19 +1,9 @@
 # 游戏窗口类名和窗口标题
 game-window: [ 'UnityWndClass', '原神' ]
 
-# 是否裁剪窗口，由四边裁剪宽度（像素） [ left, top, right, bottom ] 表示，默认不裁剪
-window-clip: [ 30, 50, 30, 10 ]
-#window-clip: ~
-
-# 指定检测用的模板，使用针对性的配置文件能进一步提高检测效率
-use-model: 1600x900_dpi100_SMAA
-
 # 使用 Alpha 通道的值提高检测准确度，会带来一定性能开销
 # [!] 某些旧版显卡可能无法使用此功能，如果适配出现问题请将该项设置为 False 并更换模板
 use-alpha: True
 
 # 强制将所有颜色转换为灰色，在 Alpha 模式无法使用时可能按需开启
 gray-only: False
-
-# 当游标在滑框内达到此进度后不再点击
-progress-threshold: 0.4

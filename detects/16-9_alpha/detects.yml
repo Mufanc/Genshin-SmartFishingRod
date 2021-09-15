@@ -1,0 +1,31 @@
+resize: [ 1600, 900 ]
+
+templates:
+  - name: button
+    rect: { left: 0.8, top: 0.85, right: 0.1, bottom: 0 }  # 识别区域
+    threshold: 0.8
+    template: button.png
+
+  - name: hook
+    rect: { left: 0.48, top: 0.1, right: 0.48, bottom: 0.76 }
+    threshold: 0.6
+    template: hook.png
+
+progress:
+  # 进度条的相对宽高
+  width: 0.26
+  height: 0.029
+
+  # 当游标在滑框内达到此进度后不再点击
+  threshold: 0.4
+
+  # 进度条中心点到鱼钩图案中心点的高度
+  offset: 0.053
+
+  # 滑框和游标颜色及判定阈值
+  frame-color: [ 192, 255, 255 ]  # BGR
+  limit-rate: 0.035
+
+  # 进度条分点检测
+  sp: [ 4, 15 ]
+  sp-diff: 10

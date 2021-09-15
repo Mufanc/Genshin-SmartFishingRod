@@ -1,4 +1,4 @@
-## 原神钓鱼辅助工具 v3.0.1 - 船新升级
+## 原神钓鱼辅助工具 v3.0.3
 
 > <div align="center"><b>「您只需抛出鱼竿，然后我们会帮您搞定一切」</b></div><br/>
 > 
@@ -24,9 +24,11 @@
 
 ### 更新内容：
 
-* 将耗时操作放到单独的进程中执行，大幅提高运行效率
+* dpi 缩放现在不会影响到脚本的识别了！此外增加了对多显示器的支持
 
-* 大部分电脑都可以使用 **Alpha 模式**提高检测的准确率（无法用于云游戏）
+* 扩大了检测区域，调整检测算法，现在几乎无需配置就可以使用该脚本
+
+* 现在在无法使用 Alpha 模式的电脑上识别效果不是很好（其实是懒得慢慢调配置文件了）
 
 ### 这个脚本有什么特色？
 
@@ -42,7 +44,7 @@
 
 #### 方式一：下载
 
-> 💡 Release 版本（v2.0.3）现已发布，下载后直接解压即可使用，[点击这里](https://github.com/Mufanc/Genshin-SmartFishingRod/releases/latest) 跳转到下载页
+> 💡 Release 版本（v3.0.1）现已发布，下载后直接解压即可使用，[点击这里](https://github.com/Mufanc/Genshin-SmartFishingRod/releases/latest) 跳转到下载页
 > 
 > ![](images/quick-start.png)
 
@@ -55,20 +57,12 @@ git clone https://github.com/Mufanc/Genshin-SmartFishingRod.git
 cd Genshin-SmartFishingRod
 ```
 
-* 然后检查您的游戏设置中是否能选择 **1600x900** 这一尺寸的窗口
-
-=> 有
-
-> 1. 进入游戏设置，将画面大小改为 1600x900，**抗锯齿改为 SMAA**，此时游戏窗口应当没有边框
+> 1. 进入游戏设置，将游戏窗口化，选择一个长宽比为 16:9 的尺寸，**抗锯齿改为 SMAA**
 > 
 > 2. 运行 `python main.py`（脚本会自动申请管理员权限）
 > 
 > 3. 选择合适位置抛下鱼竿，等待脚本自动完成钓鱼
 
-=> 没有
-
-> 很遗憾，现有的配置文件并不能完美支持你的电脑。但请不要灰心，您可以参照 [下面的教程](#关于-detectsyml) 构建自己的配置文件
- 
 ### 快捷键
 
 * <kbd>Alt + .</kbd> 
@@ -81,40 +75,50 @@ cd Genshin-SmartFishingRod
 
 * <kbd>Alt + 小键盘 0</kbd>
 
-弹出一个窗口，可以在此快速划定一些检测区域，可以很方便地生成自己的**配置文件** **（尚未实现）**
+弹出一个窗口，其中标识了识别区域和结果，方便 debug
 
 ### 关于 `detects.yml`
 
 * 该配置文件中存储着一些图片检测和坐标查找相关的选项：
 
 ```yaml
-# use for: 1600x900_dpi100_SMAA
+resize: [ 1600, 900 ]
 
 templates:
   - name: button
-    rect: { left: 0.83, top: 0.88, right: 0.13, bottom: 0.03 }  # 识别区域
-    threshold: 0.95
+    rect: { left: 0.8, top: 0.85, right: 0.1, bottom: 0 }  # 识别区域
+    threshold: 0.8
     template: button.png
 
   - name: hook
-    rect: { left: 0.49, top: 0.1, right: 0.49, bottom: 0.76 }
-    threshold: 0.7
+    rect: { left: 0.48, top: 0.1, right: 0.48, bottom: 0.76 }
+    threshold: 0.6
     template: hook.png
 
 progress:
   # 进度条的相对宽高
   width: 0.26
-  height: 0.027
+  height: 0.029
+
+  # 当游标在滑框内达到此进度后不再点击
+  threshold: 0.4
 
   # 进度条中心点到鱼钩图案中心点的高度
   offset: 0.053
 
-  # 其它相关设定
-  frame-color: [ 180, 225, 225 ]  # BGR
-  threshold: 0.035
-  sp: [ 6, 18 ]
+  # 滑框和游标颜色及判定阈值
+  frame-color: [ 192, 255, 255 ]  # BGR
+  limit-rate: 0.035
+
+  # 进度条分点检测
+  sp: [ 4, 15 ]
+  sp-diff: 10
 
 ```
+
+#### resize
+
+指定要将窗口缩放成的大小
 
 #### templates
 
@@ -146,6 +150,10 @@ rect: { left: 0, top: 0, right: 0.5, bottom: 0.5 }
 
 描述进度条的宽度和高度，均为关于游戏画面大小的相对表示（例如 `width: 0.5` 就是画面的一半宽）
 
+* **threshold**
+
+当游标在滑框内的位置达到此阈值后不再点击鼠标，可根据目标鱼种适当调整
+
 * **offset**
 
 进度条中心与「鱼钩」图标的相对距离
@@ -154,13 +162,18 @@ rect: { left: 0, top: 0, right: 0.5, bottom: 0.5 }
 
 游标和滑框的主要颜色，**注意是按 BGR 表示**
 
-* **threshold**
+* **limit-rate**
 
 进度条的判定阈值，当 `frame-color` 在框定的区域内占比达到该阈值时，认为进度条已出现
 
 * **sp**
 
 一个二元数组，设某一横坐标 x 下 y 轴方向 `frame-color` 颜色像素数目为 n，则当 `sp[0] <= n < sp[1]` 时，认为这是滑框的左边界或右边界，而当 `n >= sp[1]` 时，则认为该位置是游标。用截图工具截图并设法放大计数，便可得到 sp 的最佳取值
+
+* **sp-diff**
+
+颜色匹配的容错值，当两种颜色的曼哈顿距离不超过此值是认为匹配成功
+
 
 ### 无法使用 Alpha 模式时的一些调用技巧
 
@@ -176,8 +189,7 @@ rect: { left: 0, top: 0, right: 0.5, bottom: 0.5 }
 
 ## Todo
 
-* [ ] 使用快捷键 <kbd>Alt + 0</kbd> 快速生成一个配置文件
+* [x] 对不同大小的窗口自动执行缩放
 
 * [ ] 添加更多的配置文件模板
 
-* [ ] 对不同大小的窗口自动执行缩放

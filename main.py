@@ -9,12 +9,13 @@ import numpy as np
 from loguru import logger
 
 from automaton import Genshin, Overlay, Detector, Hotkey
-from automaton import alpha_mask
+from automaton import alpha_mask, choose_model
 
 
 class Timer(Thread):
-    def __init__(self):
+    def __init__(self, game):
         super().__init__(daemon=True)
+        self.game = game
         self.start()
 
     def run(self):
@@ -27,28 +28,19 @@ class Timer(Thread):
 
 def main():
     global dps
-    Timer()
 
     game = Genshin()
     overlay = Overlay(game.hwnd)
     hotkey = Hotkey()
-    detector = Detector()
 
+    model_name = choose_model(game.screencap())
+    logger.info(f'Loading module "{model_name}"')
+    detector = Detector(model_name)
+
+    Timer(game)
     hide_ui = False
     while True:
         screen = game.screencap()
-        # cv2.imshow('Debug', alpha_mask(screen[70:200, 750:850]))
-        # cv2.waitKey(1)
-
-        if key := hotkey.get():
-            if key[0] == 'NUMPAD':
-                if key[1]:
-                    detector.clip_image(screen, key[1])
-                else:  # Todo: 配置文件生成工具
-                    cv2.imshow('Configuration', alpha_mask(screen))
-                    cv2.waitKey(0)
-            else:
-                hide_ui = not hide_ui
         groups, cover = detector.match_template(screen)
 
         progress_found = False
@@ -62,6 +54,17 @@ def main():
             sleep(0.1)
             game.mouse(False)
 
+        if key := hotkey.get():
+            if key[0] == 'NUMPAD':
+                if key[1]:
+                    detector.clip_image(screen, key[1])
+                else:
+                    image = cv2.resize(alpha_mask(screen), cover.shape[1::-1], interpolation=cv2.INTER_NEAREST)
+                    cv2.imshow('Configuration', cv2.add(image, cover))
+                    cv2.waitKey(0)
+            else:
+                hide_ui = not hide_ui
+
         if hide_ui:
             cover = np.zeros(cover.shape, dtype=np.uint8)
         overlay.update(cover)
@@ -69,13 +72,9 @@ def main():
 
 
 if __name__ == '__main__':
-    try:
-        multiprocessing.freeze_support()  # 为了 pyinstaller 正常打包
-        if ctypes.windll.shell32.IsUserAnAdmin():
-            dps = 0
-            main()
-        else:  # 自动以管理员身份重启
-            ctypes.windll.shell32.ShellExecuteW(None, 'runas', sys.executable, __file__, None, 1)
-    except Exception as err:
-        print(err)
-        sleep(5)
+    multiprocessing.freeze_support()  # 为了 pyinstaller 正常打包
+    if ctypes.windll.shell32.IsUserAnAdmin():
+        dps = 0
+        main()
+    else:  # 自动以管理员身份重启
+        ctypes.windll.shell32.ShellExecuteW(None, 'runas', sys.executable, __file__, None, 1)

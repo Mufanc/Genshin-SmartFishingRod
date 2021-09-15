@@ -4,4 +4,3 @@ Pillow>=8.0.1
 pywin32>=301
 PyYAML>=5.4.1
 numpy>=1.19.5
-future>=0.18.2
