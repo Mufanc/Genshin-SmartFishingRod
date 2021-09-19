@@ -4,11 +4,11 @@ import ctypes.wintypes as wintypes
 import cv2
 import numpy as np
 
-from configs import configs, models
+from configs import configs
 
 
-# dpi 缩放级别会影响 win32gui.GetWindowRect，故换用此实现
-def get_window_rect(hwnd):
+def get_window_rect(hwnd):  # dpi 缩放级别会影响 win32gui.GetWindowRect，故换用此实现
+
     rect = wintypes.RECT()
     DWMWA_EXTENDED_FRAME_BOUNDS = 9
     ctypes.windll.dwmapi.DwmGetWindowAttribute(
@@ -18,17 +18,6 @@ def get_window_rect(hwnd):
         ctypes.sizeof(rect)
     )
     return rect.left, rect.top, rect.right, rect.bottom
-
-
-def choose_model(screen):
-    height, width = screen.shape[:2]
-    ratio = height / width
-    best = min(models.keys(), key=lambda key: abs(ratio - key))
-    if len(np.unique(screen[..., 3])) == 1:
-        model = 'rgb'
-    else:
-        model = 'alpha'
-    return models[best][model]
 
 
 def _alpha_mask(bgra):  # Fast
@@ -42,7 +31,7 @@ def _alpha_mask(bgra):  # Fast
     return image
 
 
-def alpha_mask(bgra):  # 尝试使用 Alpha 层作为蒙版
+def alpha_mask(bgra):
     # image = _alpha_mask(bgra)
     if configs['use-alpha']:
         alpha = bgra[..., 3]
@@ -57,3 +46,9 @@ def alpha_mask(bgra):  # 尝试使用 Alpha 层作为蒙版
         image = cv2.cvtColor(cv2.cvtColor(image, cv2.COLOR_BGR2GRAY), cv2.COLOR_GRAY2BGR)
 
     return image
+
+
+def choose_model(screen):
+    if len(np.unique(screen[..., 3])) == 1:
+        return 'rgb'
+    return 'alpha'

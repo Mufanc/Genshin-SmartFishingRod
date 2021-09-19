@@ -1,3 +1,6 @@
+# 游戏可执行文件路径
+game-executable: 'D:\Program Files\Genshin Impact\Genshin Impact Game\YuanShen.exe'
+
 # 游戏窗口类名和窗口标题
 game-window: [ 'UnityWndClass', '原神' ]
 
@@ -7,3 +10,6 @@ use-alpha: True
 
 # 强制将所有颜色转换为灰色，在 Alpha 模式无法使用时可能按需开启
 gray-only: False
+
+# 当游标在滑框内达到此进度后不再点击
+progress-threshold: 0.4

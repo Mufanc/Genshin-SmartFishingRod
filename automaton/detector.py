@@ -58,10 +58,8 @@ class Detector(object):
             cv2.putText(image, text, ((x1 + x2 - rect[0]) // 2, y1 - rect[1]), self.font, 0.5, color, 2)
 
     def match_template(self, image):  # 模板匹配
-        image = cv2.resize(image, self.configs['resize'], interpolation=cv2.INTER_NEAREST)
-
-        cover = np.zeros((*image.shape[:2], 3), dtype=np.uint8)
         height, width = image.shape[:2]
+        cover = np.zeros((height, width, 3), dtype=np.uint8)
         groups = {}
 
         for i, item in enumerate(self.configs['templates']):
@@ -105,12 +103,11 @@ class Detector(object):
         progress = alpha_mask(image[y1:y2, x1:x2])
 
         frame_color = progress_config['frame-color']
-        mask = np.all(np.abs(progress - frame_color) <= progress_config['sp-diff'], axis=2)
+        mask = np.all(progress == frame_color, axis=2)
         count = np.sum(mask)
 
-        if (count / (width * height)) >= progress_config['limit-rate']:
-            self.mark(cover, x1, y1, x2, y2, f'Progress [{count}/{width * height}]', (255, 0, 0))
-
+        self.mark(cover, x1, y1, x2, y2, f'Progress [{count}/{width * height}]', (255, 0, 0))
+        if (count / (width * height)) > progress_config['threshold']:
             sample = np.sum(mask, axis=0)
             sp = progress_config['sp']
             frame_pos, cursor_pos = [], []
@@ -130,7 +127,5 @@ class Detector(object):
                 self.mark(cover, x1 + cursor_pos[0], y1, x1 + cursor_pos[1], y2, 'Cursor', color)
 
                 # 如果未达到位置则需要点击
-                return cursor_x < frame_pos[0] + (frame_pos[1] - frame_pos[0]) * progress_config['threshold']
-        else:
-            self.mark(cover, x1, y1, x2, y2, f'Progress [{count}/{width * height}]', (0, 0, 255))
+                return cursor_x < frame_pos[0] + (frame_pos[1] - frame_pos[0]) * configs['progress-threshold']
         return None
