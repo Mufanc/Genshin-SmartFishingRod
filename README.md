@@ -40,7 +40,7 @@
 
 #### 方式一：下载
 
-> 💡 Release 版本（v3.0.1）现已发布，下载后直接解压即可使用，[点击这里](https://github.com/Mufanc/Genshin-SmartFishingRod/releases/latest) 跳转到下载页
+> 💡 Release 版本（v3.1.1）现已发布，下载后直接解压即可使用，[点击这里](https://github.com/Mufanc/Genshin-SmartFishingRod/releases/latest) 跳转到下载页
 > 
 > ![](images/quick-start.png)
 
